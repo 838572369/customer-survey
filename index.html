@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>用户满意度调查问卷</title>
+<style>
+  :root {
+    --gold: #C8A96E;
+    --gold-light: #D4BA85;
+    --gold-dark: #B89A5E;
+    --bg: #0a0a0a;
+    --card: #141414;
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --border: #2a2a2a;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+  }
+
+  .header { text-align: center; margin-bottom: 32px; }
+  .logo-area { margin-bottom: 20px; }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .intro-text {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* QR */
+  .qr-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .qr-section h3 {
+    font-size: 14px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .qr-wrap {
+    display: inline-block;
+    padding: 12px;
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+
+  .qr-wrap img { display: block; }
+
+  .qr-section .qr-hint {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  .qr-section .qr-url {
+    font-size: 12px;
+    color: var(--gold);
+    margin-top: 8px;
+    word-break: break-all;
+    cursor: pointer;
+  }
+
+  .qr-section .qr-url:hover { text-decoration: underline; }
+
+  /* Rating Legend */
+  .rating-legend {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  .rating-legend h3 {
+    font-size: 14px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-dim);
+    background: rgba(200,169,110,0.08);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .legend-item .num { color: var(--gold); font-weight: 600; }
+
+  /* Sections */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .section:hover { border-color: rgba(200,169,110,0.3); }
+
+  .section-number {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background: var(--gold);
+    color: var(--bg);
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .section-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  /* Star Rating */
+  .star-rating { display: flex; gap: 8px; justify-content: center; margin: 12px 0; }
+  .star-rating input { display: none; }
+
+  .star-rating label {
+    cursor: pointer;
+    font-size: 36px;
+    color: #333;
+    transition: color 0.15s, transform 0.15s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .star-rating label:hover,
+  .star-rating label:hover ~ label,
+  .star-rating input:checked ~ label { color: var(--gold); }
+  .star-rating label:hover { transform: scale(1.15); }
+
+  .star-rating-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .star-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    min-width: 70px;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-item { position: relative; }
+
+  .option-item input[type="checkbox"],
+  .option-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .option-label:hover {
+    background: rgba(200,169,110,0.06);
+    border-color: rgba(200,169,110,0.3);
+  }
+
+  .option-item input:checked + .option-label {
+    background: rgba(200,169,110,0.1);
+    border-color: var(--gold);
+  }
+
+  .check-icon, .radio-icon {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .check-icon { border-radius: 6px; }
+  .radio-icon { border-radius: 50%; }
+
+  .option-item input:checked + .option-label .check-icon,
+  .option-item input:checked + .option-label .radio-icon {
+    border-color: var(--gold);
+    background: var(--gold);
+  }
+
+  .check-icon::after {
+    content: '✓';
+    color: var(--bg);
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .radio-icon::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--bg);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .option-item input:checked + .option-label .check-icon::after,
+  .option-item input:checked + .option-label .radio-icon::after { opacity: 1; }
+
+  /* Textarea */
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.6;
+  }
+
+  textarea::placeholder { color: #555; }
+  textarea:focus { border-color: var(--gold); }
+
+  /* Recommend */
+  .recommend-options { display: flex; gap: 12px; }
+  .recommend-options .option-item { flex: 1; }
+  .recommend-options .option-label {
+    justify-content: center;
+    font-size: 15px;
+    padding: 14px;
+  }
+
+  /* Input */
+  input[type="text"], input[type="tel"] {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus { border-color: var(--gold); }
+  input::placeholder { color: #555; }
+
+  /* Submit */
+  .submit-area { margin-top: 24px; text-align: center; }
+
+  .submit-btn {
+    width: 100%;
+    max-width: 320px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--bg);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(200,169,110,0.3);
+  }
+
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* Success */
+  .success-msg { display: none; text-align: center; padding: 40px 20px; }
+  .success-msg .icon { font-size: 48px; margin-bottom: 16px; }
+  .success-msg h2 { font-size: 20px; color: var(--gold); margin-bottom: 8px; }
+  .success-msg p { color: var(--text-dim); font-size: 14px; }
+
+  /* Progress */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: var(--gold);
+    z-index: 100;
+    transition: width 0.3s;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 12px;
+    color: #444;
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .container { padding: 16px 12px 32px; }
+    h1 { font-size: 20px; }
+    .section { padding: 20px 16px; }
+    .star-rating label { font-size: 32px; }
+    .legend-items { gap: 6px; }
+    .recommend-options { flex-direction: column; gap: 8px; }
+    .qr-section { padding: 16px; }
+    .qr-wrap { padding: 8px; }
+  }
+
+  @supports (padding-top: env(safe-area-inset-top)) {
+    .container {
+      padding-top: calc(24px + env(safe-area-inset-top));
+      padding-bottom: calc(40px + env(safe-area-inset-bottom));
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-area">
+      <div style="font-size:28px; color:var(--gold); font-weight:700; letter-spacing:3px;">镜像化米</div>
+      <div style="font-size:11px; color:var(--text-dim); letter-spacing:4px; margin-top:4px;">VISUAL CREATIVE</div>
+    </div>
+    <h1>用户满意度调查问卷</h1>
+    <p class="intro-text">
+      感谢您选择镜像化米视觉创意！为持续提升服务质量，诚邀您花 2-3 分钟填写此问卷。您的每一条反馈都是我们进步的动力。
+    </p>
+  </div>
+
+  <!-- QR Code -->
+  <div class="qr-section" id="qrSection">
+    <h3>📱 扫码在手机上填写</h3>
+    <div class="qr-wrap">
+      <div id="qrCode"></div>
+    </div>
+    <div class="qr-hint">使用手机相机或微信扫一扫</div>
+    <div class="qr-url" id="qrUrl" title="点击复制链接"></div>
+  </div>
+
+  <!-- Rating Legend -->
+  <div class="rating-legend">
+    <h3>📋 评分标准说明</h3>
+    <div class="legend-items">
+      <div class="legend-item"><span class="num">1</span> 非常不满意</div>
+      <div class="legend-item"><span class="num">2</span> 不满意</div>
+      <div class="legend-item"><span class="num">3</span> 一般</div>
+      <div class="legend-item"><span class="num">4</span> 满意</div>
+      <div class="legend-item"><span class="num">5</span> 非常满意</div>
+    </div>
+  </div>
+
+  <form id="mainForm" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+    <input type="hidden" name="subject" value="用户满意度调查问卷 - 镜像化米">
+    <input type="hidden" name="from_name" value="满意度问卷">
+    <input type="checkbox" name="botcheck" style="display:none">
+
+    <!-- Q1 -->
+    <div class="section">
+      <div class="section-number">1</div>
+      <div class="section-title">整体满意度</div>
+      <div class="section-desc">请为本次拍摄体验打分（1-5星）</div>
+      <div class="star-rating-wrapper">
+        <div class="star-rating" id="starRating">
+          <input type="radio" name="rating" value="5" id="star5">
+          <label for="star5" title="非常满意">★</label>
+          <input type="radio" name="rating" value="4" id="star4">
+          <label for="star4" title="满意">★</label>
+          <input type="radio" name="rating" value="3" id="star3">
+          <label for="star3" title="一般">★</label>
+          <input type="radio" name="rating" value="2" id="star2">
+          <label for="star2" title="不满意">★</label>
+          <input type="radio" name="rating" value="1" id="star1">
+          <label for="star1" title="非常不满意">★</label>
+        </div>
+      </div>
+      <div class="star-label" id="starLabel">点击星星评分</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="section">
+      <div class="section-number">2</div>
+      <div class="section-title">拍摄风格满意度</div>
+      <div class="section-desc">以下哪些方面让您感到满意？（可多选）</div>
+      <div class="options">
+        <div class="option-item"><input type="checkbox" name="style_satisfied" value="构图与画面感" id="s1"><label class="option-label" for="s1"><span class="check-icon"></span>构图与画面感</label></div>
+        <div class="option-item"><input type="checkbox" name="style_satisfied" value="色彩与调色风格" id="s2"><label class="option-label" for="s2"><span class="check-icon"></span>色彩与调色风格</label></div>
+        <div class="option-item"><input type="checkbox" name="style_satisfied" value="创意与表现力" id="s3"><label class="option-label" for="s3"><span class="check-icon"></span>创意与表现力</label></div>
+        <div class="option-item"><input type="checkbox" name="style_satisfied" value="场景与道具搭配" id="s4"><label class="option-label" for="s4"><span class="check-icon"></span>场景与道具搭配</label></div>
+        <div class="option-item"><input type="checkbox" name="style_satisfied" value="后期修图效果" id="s5"><label class="option-label" for="s5"><span class="check-icon"></span>后期修图效果</label></div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="section">
+      <div class="section-number">3</div>
+      <div class="section-title">服务体验</div>
+      <div class="section-desc">您对以下服务环节的评价</div>
+      <div class="options">
+        <div class="option-item"><input type="checkbox" name="service" value="预约沟通顺畅" id="sv1"><label class="option-label" for="sv1"><span class="check-icon"></span>预约沟通顺畅</label></div>
+        <div class="option-item"><input type="checkbox" name="service" value="摄影师专业度" id="sv2"><label class="option-label" for="sv2"><span class="check-icon"></span>摄影师专业度</label></div>
+        <div class="option-item"><input type="checkbox" name="service" value="化妆造型满意" id="sv3"><label class="option-label" for="sv3"><span class="check-icon"></span>化妆造型满意</label></div>
+        <div class="option-item"><input type="checkbox" name="service" value="选片指导耐心" id="sv4"><label class="option-label" for="sv4"><span class="check-icon"></span>选片指导耐心</label></div>
+        <div class="option-item"><input type="checkbox" name="service" value="交付时效满意" id="sv5"><label class="option-label" for="sv5"><span class="check-icon"></span>交付时效满意</label></div>
+        <div class="option-item"><input type="checkbox" name="service" value="整体性价比高" id="sv6"><label class="option-label" for="sv6"><span class="check-icon"></span>整体性价比高</label></div>
+      </div>
+    </div>
+
+    <!-- Q4 (按图片修改) -->
+    <div class="section">
+      <div class="section-number">4</div>
+      <div class="section-title">您对我们有哪些改进建议？</div>
+      <div class="section-desc">任何想法都欢迎，帮助我们变得更好</div>
+      <textarea name="suggestions" placeholder="请写下您的建议，例如：拍摄流程、服务态度、环境设施、后期效果等方面..."></textarea>
+    </div>
+
+    <!-- Q5 (新增) -->
+    <div class="section">
+      <div class="section-number">5</div>
+      <div class="section-title">您是否愿意向朋友推荐我们？</div>
+      <div class="recommend-options">
+        <div class="option-item"><input type="radio" name="recommend" value="愿意" id="r1"><label class="option-label" for="r1"><span class="radio-icon"></span>愿意 👍</label></div>
+        <div class="option-item"><input type="radio" name="recommend" value="不确定" id="r2"><label class="option-label" for="r2"><span class="radio-icon"></span>不确定 🤔</label></div>
+        <div class="option-item"><input type="radio" name="recommend" value="不愿意" id="r3"><label class="option-label" for="r3"><span class="radio-icon"></span>不愿意 👎</label></div>
+      </div>
+    </div>
+
+    <!-- Q6 (新增) -->
+    <div class="section">
+      <div class="section-number">6</div>
+      <div class="section-title">未来您还有哪些拍摄需求？</div>
+      <div class="section-desc">可多选，帮助我们了解您的期待</div>
+      <div class="options">
+        <div class="option-item"><input type="checkbox" name="future_needs" value="个人写真" id="fn1"><label class="option-label" for="fn1"><span class="check-icon"></span>个人写真</label></div>
+        <div class="option-item"><input type="checkbox" name="future_needs" value="情侣/婚纱" id="fn2"><label class="option-label" for="fn2"><span class="check-icon"></span>情侣 / 婚纱</label></div>
+        <div class="option-item"><input type="checkbox" name="future_needs" value="家庭/亲子" id="fn3"><label class="option-label" for="fn3"><span class="check-icon"></span>家庭 / 亲子</label></div>
+        <div class="option-item"><input type="checkbox" name="future_needs" value="商业/产品" id="fn4"><label class="option-label" for="fn4"><span class="check-icon"></span>商业 / 产品</label></div>
+        <div class="option-item"><input type="checkbox" name="future_needs" value="活动跟拍" id="fn5"><label class="option-label" for="fn5"><span class="check-icon"></span>活动跟拍</label></div>
+        <div class="option-item"><input type="checkbox" name="future_needs" value="视频/短视频" id="fn6"><label class="option-label" for="fn6"><span class="check-icon"></span>视频 / 短视频</label></div>
+        <div class="option-item"><input type="checkbox" name="future_needs" value="暂无计划" id="fn7"><label class="option-label" for="fn7"><span class="check-icon"></span>暂无计划</label></div>
+      </div>
+    </div>
+
+    <!-- 联系方式 -->
+    <div class="section">
+      <div class="section-number">✦</div>
+      <div class="section-title">联系方式（选填）</div>
+      <div class="section-desc">如需我们回访或发送优惠信息，请留下联系方式</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <input type="text" name="name" placeholder="您的称呼">
+        <input type="tel" name="phone" placeholder="手机号 / 微信号">
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button type="submit" class="submit-btn" id="submitBtn">提交问卷</button>
+      <p style="font-size:11px; color:#444; margin-top:12px;">提交即表示您同意我们使用问卷数据改进服务</p>
+    </div>
+  </form>
+
+  <div class="success-msg" id="successMsg">
+    <div class="icon">🎉</div>
+    <h2>感谢您的反馈！</h2>
+    <p>您的意见对我们非常重要，我们会持续改进，为您带来更好的拍摄体验。</p>
+  </div>
+
+  <div class="footer">© 2026 镜像化米视觉创意 · 用心记录每一个瞬间</div>
+</div>
+
+<!-- QR Code JS (qrcodejs by davidshimjs, MIT) -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<script>
+(function() {
+  // ========== QR Code ==========
+  var surveyUrl = window.location.href;
+  var qrContainer = document.getElementById('qrCode');
+
+  if (qrContainer) {
+    new QRCode(qrContainer, {
+      text: surveyUrl,
+      width: 156,
+      height: 156,
+      colorDark: '#0a0a0a',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+
+  var qrUrl = document.getElementById('qrUrl');
+  if (qrUrl) {
+    qrUrl.textContent = surveyUrl;
+    qrUrl.addEventListener('click', function() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(surveyUrl).then(function() {
+          qrUrl.textContent = '✅ 已复制！';
+          setTimeout(function() { qrUrl.textContent = surveyUrl; }, 2000);
+        });
+      }
+    });
+  }
+
+  // ========== Star Rating ==========
+  var labels = ['', '非常不满意', '不满意', '一般', '满意', '非常满意'];
+  var starInputs = document.querySelectorAll('#starRating input');
+  var starLabel = document.getElementById('starLabel');
+
+  starInputs.forEach(function(input) {
+    input.addEventListener('change', function() {
+      starLabel.textContent = labels[this.value] + ' (' + this.value + '星)';
+      starLabel.style.color = '#C8A96E';
+    });
+  });
+
+  // ========== Progress ==========
+  var form = document.getElementById('mainForm');
+  var progressBar = document.getElementById('progressBar');
+  var allSections = form.querySelectorAll('.section');
+
+  function updateProgress() {
+    var answered = 0;
+    allSections.forEach(function(section) {
+      var radios = section.querySelectorAll('input[type="radio"]:checked');
+      var checks = section.querySelectorAll('input[type="checkbox"]:checked');
+      var texts = section.querySelectorAll('textarea, input[type="text"], input[type="tel"]');
+      var hasText = false;
+      texts.forEach(function(t) { if (t.value.trim()) hasText = true; });
+      if (radios.length > 0 || checks.length > 0 || hasText) answered++;
+    });
+    progressBar.style.width = Math.round((answered / allSections.length) * 100) + '%';
+  }
+
+  form.addEventListener('change', updateProgress);
+  form.addEventListener('input', updateProgress);
+
+  // ========== Submit ==========
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '提交中...';
+
+    var formData = new FormData(form);
+    fetch(form.action, { method: 'POST', body: formData })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        form.style.display = 'none';
+        document.getElementById('qrSection').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        progressBar.style.width = '100%';
+      } else { throw new Error('fail'); }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = '提交问卷';
+      alert('提交失败，请稍后重试');
+    });
+  });
+})();
+</script>
+</body>
+</html>
