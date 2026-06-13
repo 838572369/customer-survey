@@ -3,652 +3,279 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>用户满意度调查问卷</title>
+<title>镜像化米视觉创意 · 用户满意度调查</title>
 <style>
-  :root {
-    --gold: #C8A96E;
-    --gold-light: #D4BA85;
-    --gold-dark: #B89A5E;
-    --bg: #0a0a0a;
-    --card: #141414;
-    --text: #e8e8e8;
-    --text-dim: #888;
-    --border: #2a2a2a;
-    --radius: 12px;
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;background:#0a0a0a;color:#f5f5f0;min-height:100vh}
+
+  #cover{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:40px 20px;overflow:hidden}
+  #cover::before{content:'';position:absolute;top:12%;left:6%;width:1px;height:25%;background:linear-gradient(to bottom,transparent,#c8a86c,transparent);opacity:.5}
+  #cover::after{content:'';position:absolute;bottom:12%;right:6%;width:1px;height:25%;background:linear-gradient(to bottom,transparent,#c8a86c,transparent);opacity:.5}
+  .dot{position:absolute;border-radius:50%;border:1px solid #c8a86c;opacity:.08}
+  .dot.d1{width:300px;height:300px;top:-80px;right:-80px}
+  .dot.d2{width:200px;height:200px;bottom:-60px;left:-60px}
+  .cw{text-align:center;max-width:640px;padding:0 24px;position:relative;z-index:1}
+  .cw .logo-img{width:260px;margin-bottom:40px}
+  .cw .logo{font-size:12px;color:#c8a86c;letter-spacing:8px;margin-bottom:32px;font-family:"Helvetica Neue",sans-serif}
+  .cw h1{font-size:44px;font-weight:700;letter-spacing:6px;margin-bottom:8px;line-height:1.4}
+  .cw .en{font-size:12px;color:#c8a86c;letter-spacing:5px;font-family:"Helvetica Neue",sans-serif;margin-bottom:20px}
+  .cw .proj{display:inline-block;background:#c8a86c1a;border:1px solid #c8a86c44;border-radius:6px;padding:10px 28px;margin-bottom:40px;font-size:16px;color:#c8a86c;letter-spacing:2px}
+  .cw .ln{width:48px;height:2px;background:#c8a86c;margin:0 auto 40px}
+  .cw .desc{font-size:15px;color:#999;line-height:2.2;margin-bottom:48px}
+  .cw .desc strong{color:#ddd;font-weight:500}
+  .cw .time{font-size:13px;color:#444;margin-bottom:40px;letter-spacing:2px}
+  .cw .time span{color:#c8a86c}
+  .btn-go{display:inline-block;padding:18px 72px;background:#c8a86c;color:#0a0a0a;font-size:16px;font-weight:600;letter-spacing:6px;border-radius:4px;border:none;cursor:pointer;transition:all .25s}
+  .btn-go:hover{background:#d4b87a;transform:translateY(-2px);box-shadow:0 8px 32px rgba(200,168,108,.2)}
+
+  #survey{display:none;padding:60px 20px}
+  .c{max-width:720px;margin:0 auto}
+  .hd{text-align:center;margin-bottom:60px}
+  .hd h2{font-size:36px;font-weight:700;letter-spacing:4px;margin-bottom:12px}
+  .hd .dv{width:60px;height:2px;background:#c8a86c;margin:0 auto 16px}
+  .hd p{color:#888;font-size:14px;letter-spacing:2px}
+  .sec{margin-bottom:50px}
+  .st{font-size:13px;color:#c8a86c;letter-spacing:3px;text-transform:uppercase;margin-bottom:28px;padding-bottom:12px;border-bottom:1px solid #222}
+  .q{margin-bottom:32px}
+  .q .ql{display:block;font-size:15px;color:#ddd;margin-bottom:14px;line-height:1.6}
+  .q .ql .r{color:#c8a86c;margin-left:4px}
+  .sr{display:flex;gap:6px;flex-direction:row-reverse;justify-content:flex-end}
+  .sr input[type="radio"]{display:none}
+  .sr label{cursor:pointer;font-size:32px;color:#333;transition:color .15s;margin-bottom:0!important;line-height:1}
+  .sr label:hover,.sr label:hover~label,.sr input:checked~label{color:#c8a86c}
+  .sw{position:relative;padding-top:8px}
+  .st2{position:relative;height:6px;background:#222;border-radius:3px;margin:0 0 12px}
+  .sf{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,#c8a86c,#e0c88a);border-radius:3px;transition:width .15s}
+  input[type="range"]{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:transparent;position:absolute;top:8px;left:0;cursor:pointer;z-index:2}
+  input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:#c8a86c;border-radius:50%;border:3px solid #0a0a0a;box-shadow:0 0 0 2px #c8a86c;cursor:grab}
+  .sl{display:flex;justify-content:space-between;font-size:12px;color:#666}
+  .sv{text-align:center;font-size:28px;font-weight:700;color:#c8a86c;margin-bottom:16px;font-variant-numeric:tabular-nums}
+  .sv span{font-size:16px;font-weight:400;color:#888}
+  textarea{width:100%;padding:14px 16px;background:#141414;border:1px solid #2a2a2a;border-radius:8px;color:#f5f5f0;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;min-height:100px;resize:vertical;line-height:1.8}
+  textarea:focus{border-color:#c8a86c}
+  textarea::placeholder{color:#555}
+  .bw{text-align:center;margin-top:50px}
+  .btn{display:inline-block;padding:16px 64px;background:#c8a86c;color:#0a0a0a;font-size:15px;font-weight:600;letter-spacing:4px;border:none;border-radius:4px;cursor:pointer;transition:all .2s}
+  .btn:hover{background:#d4b87a;transform:translateY(-1px)}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+  .ft{text-align:center;margin-top:80px;padding-top:30px;border-top:1px solid #1a1a1a;color:#444;font-size:12px;letter-spacing:2px}
+
+  #done{display:none;text-align:center;padding:120px 20px}
+  #done .ic{font-size:48px;margin-bottom:20px}
+  #done h2{font-size:24px;margin-bottom:12px;font-weight:500}
+  #done p{color:#888;font-size:14px}
+
+  .rating-legend{background:#141414;border:1px solid #2a2a2a;border-radius:8px;padding:16px 20px;margin-bottom:40px;font-size:13px;color:#888;line-height:2}
+  .rating-legend strong{color:#c8a86c}
+
+  .opt-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+  .opt-group label{display:flex;align-items:center;gap:8px;padding:10px 18px;background:#141414;border:1px solid #2a2a2a;border-radius:8px;cursor:pointer;font-size:14px;color:#ddd;transition:all .2s;user-select:none}
+  .opt-group label:hover{border-color:#c8a86c44}
+  .opt-group input{display:none}
+  .opt-group input:checked+label{border-color:#c8a86c;background:#c8a86c1a;color:#c8a86c}
+
+  .qr-box{text-align:center;margin-bottom:32px}
+  .qr-box h3{font-size:14px;color:#c8a86c;font-weight:500;margin-bottom:12px;letter-spacing:2px}
+  .qr-wrap{display:inline-block;padding:12px;background:#fff;border-radius:10px;margin-bottom:8px}
+  .qr-wrap img{display:block}
+  .qr-hint{font-size:11px;color:#666}
+
+  @media(max-width:480px){
+    .cw h1{font-size:28px;letter-spacing:3px}
+    .cw .logo-img{width:180px}
+    .cw .proj{padding:8px 20px;font-size:14px}
+    .cw .desc{font-size:14px;line-height:2}
+    .btn-go{padding:16px 48px;font-size:15px}
+    .hd h2{font-size:24px}
+    .sr label{font-size:28px}
+    .sv{font-size:24px}
+    .btn{padding:14px 48px;font-size:14px}
+    .qr-box{padding:0 16px}
+    .opt-group{flex-direction:column}
   }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .container {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 24px 16px 40px;
-  }
-
-  .header { text-align: center; margin-bottom: 32px; }
-  .logo-area { margin-bottom: 20px; }
-
-  h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-  }
-
-  .intro-text {
-    font-size: 14px;
-    color: var(--text-dim);
-    line-height: 1.8;
-    max-width: 520px;
-    margin: 0 auto;
-  }
-
-  /* QR */
-  .qr-section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 24px;
-    text-align: center;
-  }
-
-  .qr-section h3 {
-    font-size: 14px;
-    color: var(--gold);
-    margin-bottom: 12px;
-    font-weight: 500;
-  }
-
-  .qr-wrap {
-    display: inline-block;
-    padding: 12px;
-    background: #fff;
-    border-radius: 10px;
-    margin-bottom: 8px;
-  }
-
-  .qr-wrap img { display: block; }
-
-  .qr-section .qr-hint {
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-top: 6px;
-  }
-
-  .qr-section .qr-url {
-    font-size: 12px;
-    color: var(--gold);
-    margin-top: 8px;
-    word-break: break-all;
-    cursor: pointer;
-  }
-
-  .qr-section .qr-url:hover { text-decoration: underline; }
-
-  /* Rating Legend */
-  .rating-legend {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 24px;
-  }
-
-  .rating-legend h3 {
-    font-size: 14px;
-    color: var(--gold);
-    margin-bottom: 10px;
-    font-weight: 500;
-  }
-
-  .legend-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    color: var(--text-dim);
-    background: rgba(200,169,110,0.08);
-    padding: 4px 10px;
-    border-radius: 20px;
-  }
-
-  .legend-item .num { color: var(--gold); font-weight: 600; }
-
-  /* Sections */
-  .section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 20px;
-    margin-bottom: 16px;
-    transition: border-color 0.2s;
-  }
-
-  .section:hover { border-color: rgba(200,169,110,0.3); }
-
-  .section-number {
-    display: inline-block;
-    width: 28px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    background: var(--gold);
-    color: var(--bg);
-    border-radius: 50%;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-
-  .section-title {
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 6px;
-    color: var(--text);
-  }
-
-  .section-desc {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-bottom: 16px;
-  }
-
-  /* Star Rating */
-  .star-rating { display: flex; gap: 8px; justify-content: center; margin: 12px 0; }
-  .star-rating input { display: none; }
-
-  .star-rating label {
-    cursor: pointer;
-    font-size: 36px;
-    color: #333;
-    transition: color 0.15s, transform 0.15s;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .star-rating label:hover,
-  .star-rating label:hover ~ label,
-  .star-rating input:checked ~ label { color: var(--gold); }
-  .star-rating label:hover { transform: scale(1.15); }
-
-  .star-rating-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
-
-  .star-label {
-    font-size: 13px;
-    color: var(--text-dim);
-    min-width: 70px;
-    text-align: center;
-    margin-top: 4px;
-  }
-
-  /* Options */
-  .options { display: flex; flex-direction: column; gap: 10px; }
-  .option-item { position: relative; }
-
-  .option-item input[type="checkbox"],
-  .option-item input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  .option-label {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 14px;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-
-  .option-label:hover {
-    background: rgba(200,169,110,0.06);
-    border-color: rgba(200,169,110,0.3);
-  }
-
-  .option-item input:checked + .option-label {
-    background: rgba(200,169,110,0.1);
-    border-color: var(--gold);
-  }
-
-  .check-icon, .radio-icon {
-    width: 22px;
-    height: 22px;
-    border: 2px solid #444;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.2s;
-  }
-
-  .check-icon { border-radius: 6px; }
-  .radio-icon { border-radius: 50%; }
-
-  .option-item input:checked + .option-label .check-icon,
-  .option-item input:checked + .option-label .radio-icon {
-    border-color: var(--gold);
-    background: var(--gold);
-  }
-
-  .check-icon::after {
-    content: '✓';
-    color: var(--bg);
-    font-size: 14px;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-
-  .radio-icon::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: var(--bg);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-
-  .option-item input:checked + .option-label .check-icon::after,
-  .option-item input:checked + .option-label .radio-icon::after { opacity: 1; }
-
-  /* Textarea */
-  textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 14px 16px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-size: 14px;
-    font-family: inherit;
-    resize: vertical;
-    outline: none;
-    transition: border-color 0.2s;
-    line-height: 1.6;
-  }
-
-  textarea::placeholder { color: #555; }
-  textarea:focus { border-color: var(--gold); }
-
-  /* Recommend */
-  .recommend-options { display: flex; gap: 12px; }
-  .recommend-options .option-item { flex: 1; }
-  .recommend-options .option-label {
-    justify-content: center;
-    font-size: 15px;
-    padding: 14px;
-  }
-
-  /* Input */
-  input[type="text"], input[type="tel"] {
-    width: 100%;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-size: 14px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  input:focus { border-color: var(--gold); }
-  input::placeholder { color: #555; }
-
-  /* Submit */
-  .submit-area { margin-top: 24px; text-align: center; }
-
-  .submit-btn {
-    width: 100%;
-    max-width: 320px;
-    padding: 14px 32px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-    color: var(--bg);
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 1px;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .submit-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(200,169,110,0.3);
-  }
-
-  .submit-btn:active { transform: translateY(0); }
-  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-
-  /* Success */
-  .success-msg { display: none; text-align: center; padding: 40px 20px; }
-  .success-msg .icon { font-size: 48px; margin-bottom: 16px; }
-  .success-msg h2 { font-size: 20px; color: var(--gold); margin-bottom: 8px; }
-  .success-msg p { color: var(--text-dim); font-size: 14px; }
-
-  /* Progress */
-  .progress-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 3px;
-    background: var(--gold);
-    z-index: 100;
-    transition: width 0.3s;
-  }
-
-  .footer {
-    text-align: center;
-    margin-top: 32px;
-    font-size: 12px;
-    color: #444;
-  }
-
-  /* Mobile */
-  @media (max-width: 480px) {
-    .container { padding: 16px 12px 32px; }
-    h1 { font-size: 20px; }
-    .section { padding: 20px 16px; }
-    .star-rating label { font-size: 32px; }
-    .legend-items { gap: 6px; }
-    .recommend-options { flex-direction: column; gap: 8px; }
-    .qr-section { padding: 16px; }
-    .qr-wrap { padding: 8px; }
-  }
-
-  @supports (padding-top: env(safe-area-inset-top)) {
-    .container {
-      padding-top: calc(24px + env(safe-area-inset-top));
-      padding-bottom: calc(40px + env(safe-area-inset-bottom));
-    }
+  @supports(padding-top:env(safe-area-inset-top)){
+    #cover{padding-top:calc(40px + env(safe-area-inset-top));padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+    #survey{padding-top:calc(60px + env(safe-area-inset-top))}
   }
 </style>
 </head>
 <body>
 
-<div class="progress-bar" id="progressBar"></div>
+<iframe name="hf" style="display:none"></iframe>
 
-<div class="container">
-  <!-- Header -->
-  <div class="header">
-    <div class="logo-area">
-      <div style="font-size:28px; color:var(--gold); font-weight:700; letter-spacing:3px;">镜像化米</div>
-      <div style="font-size:11px; color:var(--text-dim); letter-spacing:4px; margin-top:4px;">VISUAL CREATIVE</div>
+<div id="cover">
+  <div class="dot d1"></div>
+  <div class="dot d2"></div>
+  <div class="cw">
+    <img class="logo-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB8cAAAGuCAYAAAANsgdjAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGpGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4xLWMwMDMgNzkuOTY5MGE4N2ZjLCAyMDI1LzAzLzA2LTIwOjUwOjE2ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjYuMTEgKE1hY2ludG9zaCkiIHhtcDpDcmVhdGVEYXRlPSIyMDI2LTA2LTExVDE3OjU2OjUwKzA4OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyNi0wNi0xMVQxNzo1NzoxNiswODowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyNi0wNi0xMVQxNzo1NzoxNiswODowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OWU3YWRiODktOWUzNC00MWJmLWJjNTQtYzc3Zjg5MWZhZjliIiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6ZTRkNDAzZDAtOTRlMS02NzQ1LWJkMmItYmE0NDA4YzRlYzQwIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MTQ5NzRkY2ItYmExYy00ZWMwLWJkYTItZmViMmJjNmFlNTFjIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoxNDk3NGRjYi1iYTFjLTRlYzAtYmRhMi1mZWIyYmM2YWU1MWMiIHN0RXZ0OndoZW49IjIwMjYtMDYtMTFUMTc6NTY6NTArMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyNi4xMSAoTWFjaW50b3NoKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6ZTdiMWQ5YzUtYzY3Ni00NjA0LTk2YjgtZmU3NjYyZWRmNWI5IiBzdEV2dDp3aGVuPSIyMDI2LTA2LTExVDE3OjU3OjE2KzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjYuMTEgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjllN2FkYjg5LTllMzQtNDFiZi1iYzU0LWM3N2Y4OTFmYWY5YiIgc3RFdnQ6d2hlbj0iMjAyNi0wNi0xMVQxNzo1NzoxNiswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjExIChNYWNpbnRvc2gpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PnrtxHEAAEjrSURBVHic7d3tdRzHmTbg2T3+T7wREI6AcASkIyAc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AQAAAAAAAChPOA4AAAAAAABAecJxAAAAAAAAAMoTjgMAAAAAAABQnnAcAAAAAAAAgPKE4wAAAAAAAACUJxwHAAAAAAAAoDzhOAAAAAAAAADlCccBAAAAAAAAKE84DgAAAAAAAEB5wnEAAAAAAAAAyhOOAwAAAAAAAFCecBwAAAAAAACA8oTjAAAAAAAAAJQnHAcAAAAAAACgPOE4AAAAAAAAAOUJxwEAAAAAAAAoTzgOAAAAAAAAQHnCcQAAAAAAAADKE44DAAAAAAAAUJ5wHAAAAAAAAIDyhOMAAAAAAAAAlCccBwAAAAAAAKA84TgAAAAAAAAA5QnHAQAAAAAAAChPOA4AAAAAAABAecJxAAAAAAAAAMoTjgMAAAAAAABQnnAcAAAAAAAAgPKE4wAAAAAAAACUJxwHAAAAAAAAoDzhOAAAAAAAAADlCccBAAAAAAAAKE84DgAAAAAAAEB5wnEAAAAAAAAAyhOOAwAAAAAAAFCecBwAAAAAAACA8oTjAAAAAAAAAJQnHAcAAAAAAACgPOE4AAAAAAAAAOUJxwEAAAAAAAAoTzgOAAAAAAAAQHnCcQAAAAAAAADKE44DAAAAAAAAUJ5wHAAAAAAAAIDyhOMAAAAAAAAAlCccBwAAAAAAAKA84TgAAAAAAAAA5QnHAQAAAAAAAChPOA4AAAAAAABAecJxAAAAAAAAAMoTjgMAAAAAAABQnnAcAAAAAAAAgPKE4wAAAAAAAACUJxwHAAAAAAAAoDzhOAAAAAAAAADlCccBAAAAAAAAKE84DgAAAAAAAEB5wnEAAAAAAAAAyhOOAwAAAAAAAFCecBwAAAAAAACA8oTjAAAAAAAAAJQnHAcAAAAAAACgPOE4AAAAAAAAAOUJxwEAAAAAAAAoTzgOAAAAAAAAQHnCcQAAAAAAAADKE44DAAAAAAAAUJ5wHAAAAAAAAIDyhOMAAAAAAAAAlCccBwAAAAAAAKA84TgAAAAAAAAA5QnHAQAAAAAAAChPOA4AAAAAAABAecJxAAAAAAAAAMoTjgMAAAAAAABQnnAcAAAAAAAAgPKE4wAAAAAAAACUJxwHAAAAAAAAoDzhOAAAAAAAAADlCccBAAAAAAAAKE84DgAAAAAAAEB5wnEAAAAAAAAAyhOOAwAAAAAAAFCecBwAAAAAAACA8oTjAAAAAAAAAJQnHAcAAAAAAACgPOE4AAAAAAAAAOUJxwEAAAAAAAAoTzgOAAAAAAAAQHnCcQAAAAAAAADKE44DAAAAAAAAUJ5wHAAAAAAAAIDyhOMAAAAAAAAAlCccBwAAAAAAAKA84TgAAAAAAAAA5QnHAQAAAAAAAChPOA4AAAAAAABAecJxAAAAAAAAAMoTjgMAAAAAAABQnnAcAAAAAAAAgPKE4wAAAAAAAACUJxwHAAAAAAAAoDzhOAAAAAAAAADlCccBAAAAAAAAKE84DgAAAAAAAEB5wnEAAAAAAAAAyhOOAwAAAAAAAFCecBwAAAAAAACA8oTjAAAAAAAAAJQnHAcAAAAAAACgPOE4AAAAAAAAAOUJxwEAAAAAAAAoTzgOAAAAAAAAQHnCcQAAAAAAAADKE44DAAAAAAAAUJ5wHAAAAAAAAIDyhOMAAAAAAAAAlCccBwAAAAAAAKA84TgAAAAAAAAA5QnHAQAAAAAAAChPOA4AAAAAAABAecJxAAAAAAAAAMoTjgMAAAAAAABQnnAcAAAAAAAAgPKE4wAAAAAAAACUJxwHAAAAAAAAoDzhOAAAAAAAAADlCccBAAAAAAAAKE84DgAAAAAAAEB5wnEAAAAAAAAAyhOOAwAAAAAAAFCecBwAAAAAAACA8oTjAAAAAAAAAJQnHAcAAAAAAACgPOE4AAAAAAAAAOUJxwEAAAAAAAAoTzgOAAAAAAAAQHnCcQAAAAAAAADKE44DAAAAAAAAUJ5wHAAAAAAAAIDyhOMAAAAAAAAAlCccBwAAAAAAAKA84TgAAAAAAAAA5QnHAQAAAAAAAChPOA4AAAAAAABAecJxAAAAAAAAAMoTjgMAAAAAAACwqe7/A86aEyOQPeKOAAAAAElFTkSuQmCC" alt="镜像化米视觉创意">
+    <div class="logo">MIRROR VISUAL CREATIVE</div>
+    <h1>用户满意度调查</h1>
+    <div class="en">USER SATISFACTION SURVEY</div>
+    <div class="proj">TATA秋LOOK</div>
+    <div class="ln"></div>
+    <p class="desc">为更好赋能品牌，邀请您填写此问卷<br>共筑品牌视觉美学，<strong>镜像化米</strong>感谢您的箴言</p>
+    <div class="time">预计用时 <span>1-2 分钟</span></div>
+    <div class="qr-box">
+      <h3>📱 扫码在手机上填写</h3>
+      <div class="qr-wrap"><img src="data:image/png;base64,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" width="120" height="120" alt="扫码填写"></div>
+      <div class="qr-hint">使用手机相机或微信扫一扫</div>
     </div>
-    <h1>用户满意度调查问卷</h1>
-    <p class="intro-text">
-      感谢您选择镜像化米视觉创意！为持续提升服务质量，诚邀您花 2-3 分钟填写此问卷。您的每一条反馈都是我们进步的动力。
-    </p>
+    <button class="btn-go" id="goBtn">开 始 评 价</button>
   </div>
-
-  <!-- QR Code -->
-  <div class="qr-section" id="qrSection">
-    <h3>📱 扫码在手机上填写</h3>
-    <div class="qr-wrap">
-      <div id="qrCode"></div>
-    </div>
-    <div class="qr-hint">使用手机相机或微信扫一扫</div>
-    <div class="qr-url" id="qrUrl" title="点击复制链接"></div>
-  </div>
-
-  <!-- Rating Legend -->
-  <div class="rating-legend">
-    <h3>📋 评分标准说明</h3>
-    <div class="legend-items">
-      <div class="legend-item"><span class="num">1</span> 非常不满意</div>
-      <div class="legend-item"><span class="num">2</span> 不满意</div>
-      <div class="legend-item"><span class="num">3</span> 一般</div>
-      <div class="legend-item"><span class="num">4</span> 满意</div>
-      <div class="legend-item"><span class="num">5</span> 非常满意</div>
-    </div>
-  </div>
-
-  <form id="mainForm" action="https://api.web3forms.com/submit" method="POST">
-    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-    <input type="hidden" name="subject" value="用户满意度调查问卷 - 镜像化米">
-    <input type="hidden" name="from_name" value="满意度问卷">
-    <input type="checkbox" name="botcheck" style="display:none">
-
-    <!-- Q1 -->
-    <div class="section">
-      <div class="section-number">1</div>
-      <div class="section-title">整体满意度</div>
-      <div class="section-desc">请为本次拍摄体验打分（1-5星）</div>
-      <div class="star-rating-wrapper">
-        <div class="star-rating" id="starRating">
-          <input type="radio" name="rating" value="5" id="star5">
-          <label for="star5" title="非常满意">★</label>
-          <input type="radio" name="rating" value="4" id="star4">
-          <label for="star4" title="满意">★</label>
-          <input type="radio" name="rating" value="3" id="star3">
-          <label for="star3" title="一般">★</label>
-          <input type="radio" name="rating" value="2" id="star2">
-          <label for="star2" title="不满意">★</label>
-          <input type="radio" name="rating" value="1" id="star1">
-          <label for="star1" title="非常不满意">★</label>
-        </div>
-      </div>
-      <div class="star-label" id="starLabel">点击星星评分</div>
-    </div>
-
-    <!-- Q2 -->
-    <div class="section">
-      <div class="section-number">2</div>
-      <div class="section-title">拍摄风格满意度</div>
-      <div class="section-desc">以下哪些方面让您感到满意？（可多选）</div>
-      <div class="options">
-        <div class="option-item"><input type="checkbox" name="style_satisfied" value="构图与画面感" id="s1"><label class="option-label" for="s1"><span class="check-icon"></span>构图与画面感</label></div>
-        <div class="option-item"><input type="checkbox" name="style_satisfied" value="色彩与调色风格" id="s2"><label class="option-label" for="s2"><span class="check-icon"></span>色彩与调色风格</label></div>
-        <div class="option-item"><input type="checkbox" name="style_satisfied" value="创意与表现力" id="s3"><label class="option-label" for="s3"><span class="check-icon"></span>创意与表现力</label></div>
-        <div class="option-item"><input type="checkbox" name="style_satisfied" value="场景与道具搭配" id="s4"><label class="option-label" for="s4"><span class="check-icon"></span>场景与道具搭配</label></div>
-        <div class="option-item"><input type="checkbox" name="style_satisfied" value="后期修图效果" id="s5"><label class="option-label" for="s5"><span class="check-icon"></span>后期修图效果</label></div>
-      </div>
-    </div>
-
-    <!-- Q3 -->
-    <div class="section">
-      <div class="section-number">3</div>
-      <div class="section-title">服务体验</div>
-      <div class="section-desc">您对以下服务环节的评价</div>
-      <div class="options">
-        <div class="option-item"><input type="checkbox" name="service" value="预约沟通顺畅" id="sv1"><label class="option-label" for="sv1"><span class="check-icon"></span>预约沟通顺畅</label></div>
-        <div class="option-item"><input type="checkbox" name="service" value="摄影师专业度" id="sv2"><label class="option-label" for="sv2"><span class="check-icon"></span>摄影师专业度</label></div>
-        <div class="option-item"><input type="checkbox" name="service" value="化妆造型满意" id="sv3"><label class="option-label" for="sv3"><span class="check-icon"></span>化妆造型满意</label></div>
-        <div class="option-item"><input type="checkbox" name="service" value="选片指导耐心" id="sv4"><label class="option-label" for="sv4"><span class="check-icon"></span>选片指导耐心</label></div>
-        <div class="option-item"><input type="checkbox" name="service" value="交付时效满意" id="sv5"><label class="option-label" for="sv5"><span class="check-icon"></span>交付时效满意</label></div>
-        <div class="option-item"><input type="checkbox" name="service" value="整体性价比高" id="sv6"><label class="option-label" for="sv6"><span class="check-icon"></span>整体性价比高</label></div>
-      </div>
-    </div>
-
-    <!-- Q4 (按图片修改) -->
-    <div class="section">
-      <div class="section-number">4</div>
-      <div class="section-title">您对我们有哪些改进建议？</div>
-      <div class="section-desc">任何想法都欢迎，帮助我们变得更好</div>
-      <textarea name="suggestions" placeholder="请写下您的建议，例如：拍摄流程、服务态度、环境设施、后期效果等方面..."></textarea>
-    </div>
-
-    <!-- Q5 (新增) -->
-    <div class="section">
-      <div class="section-number">5</div>
-      <div class="section-title">您是否愿意向朋友推荐我们？</div>
-      <div class="recommend-options">
-        <div class="option-item"><input type="radio" name="recommend" value="愿意" id="r1"><label class="option-label" for="r1"><span class="radio-icon"></span>愿意 👍</label></div>
-        <div class="option-item"><input type="radio" name="recommend" value="不确定" id="r2"><label class="option-label" for="r2"><span class="radio-icon"></span>不确定 🤔</label></div>
-        <div class="option-item"><input type="radio" name="recommend" value="不愿意" id="r3"><label class="option-label" for="r3"><span class="radio-icon"></span>不愿意 👎</label></div>
-      </div>
-    </div>
-
-    <!-- Q6 (新增) -->
-    <div class="section">
-      <div class="section-number">6</div>
-      <div class="section-title">未来您还有哪些拍摄需求？</div>
-      <div class="section-desc">可多选，帮助我们了解您的期待</div>
-      <div class="options">
-        <div class="option-item"><input type="checkbox" name="future_needs" value="个人写真" id="fn1"><label class="option-label" for="fn1"><span class="check-icon"></span>个人写真</label></div>
-        <div class="option-item"><input type="checkbox" name="future_needs" value="情侣/婚纱" id="fn2"><label class="option-label" for="fn2"><span class="check-icon"></span>情侣 / 婚纱</label></div>
-        <div class="option-item"><input type="checkbox" name="future_needs" value="家庭/亲子" id="fn3"><label class="option-label" for="fn3"><span class="check-icon"></span>家庭 / 亲子</label></div>
-        <div class="option-item"><input type="checkbox" name="future_needs" value="商业/产品" id="fn4"><label class="option-label" for="fn4"><span class="check-icon"></span>商业 / 产品</label></div>
-        <div class="option-item"><input type="checkbox" name="future_needs" value="活动跟拍" id="fn5"><label class="option-label" for="fn5"><span class="check-icon"></span>活动跟拍</label></div>
-        <div class="option-item"><input type="checkbox" name="future_needs" value="视频/短视频" id="fn6"><label class="option-label" for="fn6"><span class="check-icon"></span>视频 / 短视频</label></div>
-        <div class="option-item"><input type="checkbox" name="future_needs" value="暂无计划" id="fn7"><label class="option-label" for="fn7"><span class="check-icon"></span>暂无计划</label></div>
-      </div>
-    </div>
-
-    <!-- 联系方式 -->
-    <div class="section">
-      <div class="section-number">✦</div>
-      <div class="section-title">联系方式（选填）</div>
-      <div class="section-desc">如需我们回访或发送优惠信息，请留下联系方式</div>
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        <input type="text" name="name" placeholder="您的称呼">
-        <input type="tel" name="phone" placeholder="手机号 / 微信号">
-      </div>
-    </div>
-
-    <div class="submit-area">
-      <button type="submit" class="submit-btn" id="submitBtn">提交问卷</button>
-      <p style="font-size:11px; color:#444; margin-top:12px;">提交即表示您同意我们使用问卷数据改进服务</p>
-    </div>
-  </form>
-
-  <div class="success-msg" id="successMsg">
-    <div class="icon">🎉</div>
-    <h2>感谢您的反馈！</h2>
-    <p>您的意见对我们非常重要，我们会持续改进，为您带来更好的拍摄体验。</p>
-  </div>
-
-  <div class="footer">© 2026 镜像化米视觉创意 · 用心记录每一个瞬间</div>
 </div>
 
-<!-- QR Code JS (qrcodejs by davidshimjs, MIT) -->
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<div id="survey">
+<div class="c" id="formPage">
+  <div class="hd">
+    <h2>用户满意度调查</h2>
+    <div class="dv"></div>
+    <p>TATA秋LOOK</p>
+  </div>
+
+  <form action="https://api.web3forms.com/submit" method="POST" id="f" target="hf">
+    <input type="hidden" name="access_key" value="bb8a27d4-0dbc-4477-af28-d82b22223d61">
+    <input type="hidden" name="_subject" id="hs" value="">
+    <input type="hidden" name="from" value="用户满意度调查">
+    <input type="hidden" name="① 需求理解" id="f1" value="">
+    <input type="hidden" name="② 现场效率" id="f2" value="">
+    <input type="hidden" name="③ 交片周期" id="f3" value="">
+    <input type="hidden" name="④ 服务专业" id="f4" value="">
+    <input type="hidden" name="⑤ 成片质量" id="f5" value="">
+    <input type="hidden" name="⑥ 品牌调性" id="f6" value="">
+    <input type="hidden" name="⑧ 策划落地程度" id="f8" value="">
+    <input type="hidden" name="综合评分" id="fa" value="">
+    <input type="hidden" name="提交时间" id="ft" value="">
+    <input type="hidden" name="项目名称" value="TATA秋LOOK">
+    <input type="hidden" name="⑨ 是否推荐" id="f9" value="">
+    <input type="hidden" name="⑩ 后续需求" id="f10" value="">
+
+  <div class="rating-legend">
+    <strong>评分标准：</strong><br>
+    5 = 远超预期 &nbsp;|&nbsp; 4 = 符合预期 &nbsp;|&nbsp; 3 = 基本符合，有小瑕疵 &nbsp;|&nbsp; 2 = 不符合预期，有明显问题 &nbsp;|&nbsp; 1 = 严重不符合，影响使用
+  </div>
+
+  <div class="sec">
+    <div class="st">一、拍摄过程满意度</div>
+    <div class="q"><label class="ql">前期沟通中，对需求的理解是否准确？<span class="r">*</span></label>
+      <div class="sr"><input type="radio" id="q15" name="q1" value="5"><label for="q15">★</label><input type="radio" id="q14" name="q1" value="4"><label for="q14">★</label><input type="radio" id="q13" name="q1" value="3"><label for="q13">★</label><input type="radio" id="q12" name="q1" value="2"><label for="q12">★</label><input type="radio" id="q11" name="q1" value="1"><label for="q11">★</label></div>
+    </div>
+    <div class="q"><label class="ql">拍摄现场的组织和效率如何？<span class="r">*</span></label>
+      <div class="sr"><input type="radio" id="q25" name="q2" value="5"><label for="q25">★</label><input type="radio" id="q24" name="q2" value="4"><label for="q24">★</label><input type="radio" id="q23" name="q2" value="3"><label for="q23">★</label><input type="radio" id="q22" name="q2" value="2"><label for="q22">★</label><input type="radio" id="q21" name="q2" value="1"><label for="q21">★</label></div>
+    </div>
+    <div class="q"><label class="ql">交片周期是否符合预期？<span class="r">*</span></label>
+      <div class="sr"><input type="radio" id="q35" name="q3" value="5"><label for="q35">★</label><input type="radio" id="q34" name="q3" value="4"><label for="q34">★</label><input type="radio" id="q33" name="q3" value="3"><label for="q33">★</label><input type="radio" id="q32" name="q3" value="2"><label for="q32">★</label><input type="radio" id="q31" name="q3" value="1"><label for="q31">★</label></div>
+    </div>
+    <div class="q"><label class="ql">整体服务态度和专业度如何？<span class="r">*</span></label>
+      <div class="sr"><input type="radio" id="q45" name="q4" value="5"><label for="q45">★</label><input type="radio" id="q44" name="q4" value="4"><label for="q44">★</label><input type="radio" id="q43" name="q4" value="3"><label for="q43">★</label><input type="radio" id="q42" name="q4" value="2"><label for="q42">★</label><input type="radio" id="q41" name="q4" value="1"><label for="q41">★</label></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">二、成片满意度</div>
+    <div class="q"><label class="ql">本次成片的整体质量是否满意？<span class="r">*</span></label>
+      <div class="sr"><input type="radio" id="q55" name="q5" value="5"><label for="q55">★</label><input type="radio" id="q54" name="q5" value="4"><label for="q54">★</label><input type="radio" id="q53" name="q5" value="3"><label for="q53">★</label><input type="radio" id="q52" name="q5" value="2"><label for="q52">★</label><input type="radio" id="q51" name="q5" value="1"><label for="q51">★</label></div>
+    </div>
+    <div class="q"><label class="ql">成片是否符合品牌调性？<span class="r">*</span></label>
+      <div class="sr"><input type="radio" id="q65" name="q6" value="5"><label for="q65">★</label><input type="radio" id="q64" name="q6" value="4"><label for="q64">★</label><input type="radio" id="q63" name="q6" value="3"><label for="q63">★</label><input type="radio" id="q62" name="q6" value="2"><label for="q62">★</label><input type="radio" id="q61" name="q6" value="1"><label for="q61">★</label></div>
+    </div>
+    <div class="q"><label class="ql">您认为其它板块提升空间或建议</label>
+      <textarea name="⑦ 提升建议" placeholder="请描述您觉得可以改进的方面，例如：光影、构图、色调、场景搭配、后期修图……"></textarea>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">三、策划方案落地程度</div>
+    <div class="q"><label class="ql">策划方案与最终成片的落地程度<span class="r">*</span></label>
+      <div class="sv"><span id="sv">50</span><span>%</span></div>
+      <div class="sw">
+        <div class="st2"><div class="sf" id="sf" style="width:50%"></div></div>
+        <input type="range" min="10" max="100" value="50" step="5" id="sl">
+        <div class="sl"><span>10%</span><span>完全不符</span><span>高度还原</span><span>100%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">四、推荐与后续</div>
+    <div class="q">
+      <label class="ql">您是否愿意推荐给其他品牌？<span class="r">*</span></label>
+      <div class="opt-group">
+        <input type="radio" name="recommend" value="愿意" id="rec1"><label for="rec1">👍 愿意</label>
+        <input type="radio" name="recommend" value="暂时没有想到" id="rec2"><label for="rec2">🤔 暂时没有想到</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="ql">贵品牌后续是否有其他拍摄需求？<span class="r">*</span></label>
+      <div class="opt-group">
+        <input type="radio" name="future" value="有需求" id="fut1"><label for="fut1">📋 有需求</label>
+        <input type="radio" name="future" value="暂时未定" id="fut2"><label for="fut2">⏳ 暂时未定</label>
+        <input type="radio" name="future" value="没有需求" id="fut3"><label for="fut3">❌ 没有需求</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="bw"><button type="submit" class="btn" id="sb">提 交</button></div>
+  </form>
+  <div class="ft">镜像化米视觉创意 · MIRROR VISUAL CREATIVE</div>
+</div>
+</div>
+
+<div id="done">
+  <div class="ic">✦</div>
+  <h2>感谢您的反馈</h2>
+  <p>我们会认真对待每一条建议，持续优化服务质量</p>
+</div>
 
 <script>
-(function() {
-  // ========== QR Code ==========
-  var surveyUrl = window.location.href;
-  var qrContainer = document.getElementById('qrCode');
+var sl=document.getElementById('sl'),sv=document.getElementById('sv'),sf=document.getElementById('sf');
+sl.oninput=function(){sv.textContent=sl.value;sf.style.width=sl.value+'%'};
 
-  if (qrContainer) {
-    new QRCode(qrContainer, {
-      text: surveyUrl,
-      width: 156,
-      height: 156,
-      colorDark: '#0a0a0a',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
+document.getElementById('goBtn').onclick=function(){
+  document.getElementById('cover').style.display='none';
+  document.getElementById('survey').style.display='block';
+  window.scrollTo(0,0);
+};
+
+document.getElementById('f').addEventListener('submit',function(e){
+  e.preventDefault();
+  var rq=['q1','q2','q3','q4','q5','q6'];
+  for(var i=0;i<rq.length;i++){
+    if(!document.querySelector('input[name="'+rq[i]+'"]:checked')){alert('请完成所有必填题目 ⭐');return}
   }
+  if(!document.querySelector('input[name="recommend"]:checked')){alert('请选择是否愿意推荐');return}
+  if(!document.querySelector('input[name="future"]:checked')){alert('请选择后续拍摄需求');return}
 
-  var qrUrl = document.getElementById('qrUrl');
-  if (qrUrl) {
-    qrUrl.textContent = surveyUrl;
-    qrUrl.addEventListener('click', function() {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(surveyUrl).then(function() {
-          qrUrl.textContent = '✅ 已复制！';
-          setTimeout(function() { qrUrl.textContent = surveyUrl; }, 2000);
-        });
-      }
-    });
-  }
+  var v=function(n){return document.querySelector('input[name="'+n+'"]:checked').value};
+  var s=function(n){var r='';for(var i=0;i<+n;i++)r+='⭐';return r};
+  var vals=[+v('q1'),+v('q2'),+v('q3'),+v('q4'),+v('q5'),+v('q6')];
+  var avg=(vals.reduce(function(a,b){return a+b},0)/vals.length).toFixed(1);
 
-  // ========== Star Rating ==========
-  var labels = ['', '非常不满意', '不满意', '一般', '满意', '非常满意'];
-  var starInputs = document.querySelectorAll('#starRating input');
-  var starLabel = document.getElementById('starLabel');
+  document.getElementById('hs').value='用户满意度 · TATA秋LOOK · 综合'+avg+'分';
+  document.getElementById('f1').value=s(v('q1'))+' ('+v('q1')+'/5)';
+  document.getElementById('f2').value=s(v('q2'))+' ('+v('q2')+'/5)';
+  document.getElementById('f3').value=s(v('q3'))+' ('+v('q3')+'/5)';
+  document.getElementById('f4').value=s(v('q4'))+' ('+v('q4')+'/5)';
+  document.getElementById('f5').value=s(v('q5'))+' ('+v('q5')+'/5)';
+  document.getElementById('f6').value=s(v('q6'))+' ('+v('q6')+'/5)';
+  document.getElementById('f8').value=sl.value+'%';
+  document.getElementById('fa').value=avg+' / 5.0';
+  document.getElementById('ft').value=new Date().toLocaleString('zh-CN');
+  document.getElementById('f9').value=v('recommend');
+  document.getElementById('f10').value=v('future');
 
-  starInputs.forEach(function(input) {
-    input.addEventListener('change', function() {
-      starLabel.textContent = labels[this.value] + ' (' + this.value + '星)';
-      starLabel.style.color = '#C8A96E';
-    });
+  rq.forEach(function(n){
+    document.querySelectorAll('input[name="'+n+'"]').forEach(function(el){el.removeAttribute('name')});
   });
 
-  // ========== Progress ==========
-  var form = document.getElementById('mainForm');
-  var progressBar = document.getElementById('progressBar');
-  var allSections = form.querySelectorAll('.section');
-
-  function updateProgress() {
-    var answered = 0;
-    allSections.forEach(function(section) {
-      var radios = section.querySelectorAll('input[type="radio"]:checked');
-      var checks = section.querySelectorAll('input[type="checkbox"]:checked');
-      var texts = section.querySelectorAll('textarea, input[type="text"], input[type="tel"]');
-      var hasText = false;
-      texts.forEach(function(t) { if (t.value.trim()) hasText = true; });
-      if (radios.length > 0 || checks.length > 0 || hasText) answered++;
-    });
-    progressBar.style.width = Math.round((answered / allSections.length) * 100) + '%';
-  }
-
-  form.addEventListener('change', updateProgress);
-  form.addEventListener('input', updateProgress);
-
-  // ========== Submit ==========
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = '提交中...';
-
-    var formData = new FormData(form);
-    fetch(form.action, { method: 'POST', body: formData })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.success) {
-        form.style.display = 'none';
-        document.getElementById('qrSection').style.display = 'none';
-        document.getElementById('successMsg').style.display = 'block';
-        progressBar.style.width = '100%';
-      } else { throw new Error('fail'); }
-    })
-    .catch(function() {
-      btn.disabled = false;
-      btn.textContent = '提交问卷';
-      alert('提交失败，请稍后重试');
-    });
-  });
-})();
+  document.getElementById('f').submit();
+  document.getElementById('sb').disabled=true;
+  document.getElementById('sb').textContent='提交中…';
+  setTimeout(function(){
+    document.getElementById('survey').style.display='none';
+    document.getElementById('done').style.display='block';
+    window.scrollTo(0,0);
+  },2000);
+});
 </script>
 </body>
 </html>
